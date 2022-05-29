@@ -1,0 +1,37 @@
+import csv
+PATH="J:\TEST1.txt"
+BasePath="Base.csv"
+def GetSum(PATH):
+file=open(PATH,"rb")
+Bytes=file.read()
+ConSum=0
+for i in range(0,len(Bytes)):
+ConSum=ConSum+Bytes[i]*211
+file.close()
+return ConSum
+def AddToBase(Path, csum):
+print("Файл новый и занесён в базу ")
+with open(BasePath,'a',newline='') as file:
+writer=csv.writer(file,delimiter=';')
+writer.writerow([Path,(csum),''])
+def Check(Path):
+file=open(BasePath,"r")
+Table=file.read()
+#print(Table)
+csum=0
+i=int(Table.find(Path))
+#print(i)
+if (i>-1):
+Table=Table[i+1:-1]
+csum=Table[int(Table.find(';'))+1:int(Table.find('\n'))]
+if(csum==''):
+csum=Table[int(Table.find(';'))+1:len(Table)+100]
+#print(csum)
+file.close()
+return i,csum
+ConSum=GetSum(PATH)
+print("Контрольная сумма: ",ConSum)
+ch=Check(PATH)
+if (ch[0]==-1):
+AddToBase(PATH,ConSum)
+else:
